@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-animals-table
+      author: danila
+      changes:
+        - createTable:
+            tableName: animals
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: species
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: owner_name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: worker_name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: check_in_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: planned_check_out_date
+                  type: DATE
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: actual_check_out_date
+                  type: DATE
+
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
