@@ -3,12 +3,15 @@ package com.example.animal_hotel.entity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table(name = "animals")
 public class Animal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @Column(nullable = false, length = 100)
@@ -30,9 +33,11 @@ public class Animal {
     private LocalDate plannedCheckOutDate;
 
     @Column(name = "actual_check_out_date")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate actualCheckOutDate;
 
     @Column(nullable = false, length = 20)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String status;
 
     public Animal() {
