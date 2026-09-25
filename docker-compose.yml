@@ -1,4 +1,5 @@
 services:
+
   postgres:
     image: postgres:17
     container_name: animal-hotel-db
@@ -13,15 +14,40 @@ services:
     networks:
       - animal-hotel-network
 
-  app:
-    build: .
+  animal-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: animal-hotel-app
     depends_on:
       - postgres
-    ports:
-      - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - animal-hotel-network
+
+  report-service:
+    build:
+      context: ./report-service
+      dockerfile: Dockerfile
+    container_name: animal-hotel-report
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - animal-hotel-network
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: animal-hotel-gateway
+    depends_on:
+      - animal-service
+      - report-service
+    ports:
+      - "8080:8080"
     networks:
       - animal-hotel-network
 
