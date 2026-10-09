@@ -14,7 +14,7 @@ public class Animal {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "names",nullable = false, length = 100)
     private String name;
 
     @Column(nullable = false, length = 50)

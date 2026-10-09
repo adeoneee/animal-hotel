@@ -14,11 +14,11 @@ public class GatewayConfig {
 
                 .route("animal-service", route -> route
                         .path("/api/animals/**")
-                        .uri("http://localhost:8080"))
+                        .uri("http://animal-service:8080"))
 
                 .route("report-service", route -> route
                         .path("/api/reports/**")
-                        .uri("http://localhost:8081"))
+                        .uri("http://report-service:8081"))
 
                 .build();
     }

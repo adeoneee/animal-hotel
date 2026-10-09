@@ -4,9 +4,9 @@ services:
     image: postgres:17
     container_name: animal-hotel-db
     environment:
-      POSTGRES_DB: animal_hotel
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -47,7 +47,7 @@ services:
       - animal-service
       - report-service
     ports:
-      - "8080:8080"
+      - "8080:8090"
     networks:
       - animal-hotel-network
 
@@ -56,3 +56,4 @@ networks:
 
 volumes:
   postgres_data:
+

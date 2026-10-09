@@ -10,7 +10,8 @@ public class Animal {
 
     @Id
     private Long id;
-
+    
+    @Column(name = "names")
     private String name;
 
     private String species;

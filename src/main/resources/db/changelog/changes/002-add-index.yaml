@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-index-species
+      author: danila
+      changes:
+        - createIndex:
+            tableName: animals
+            indexName: idx_animals_species
+            columns:
+              - column:
+                  name: species
+      rollback:
+        - dropIndex:
+            tableName: animals
+            indexName: idx_animals_species
