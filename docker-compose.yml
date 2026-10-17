@@ -25,6 +25,11 @@ services:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - animal-hotel-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://host.docker.internal:12201"
+        tag: "animal-service"
 
   report-service:
     build:
@@ -32,11 +37,16 @@ services:
       dockerfile: Dockerfile
     container_name: animal-hotel-report
     depends_on:
-      - postgres
+      - animal-service
     environment:
       SPRING_PROFILES_ACTIVE: docker
     networks:
       - animal-hotel-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://host.docker.internal:12201"
+        tag: "report-service"
 
   gateway:
     build:
@@ -50,10 +60,72 @@ services:
       - "8080:8090"
     networks:
       - animal-hotel-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://host.docker.internal:12201"
+        tag: "gateway"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: animal-hotel-elasticsearch
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - animal-hotel-network
+
+  logstash:
+    build:
+      context: ./logstash
+      dockerfile: Dockerfile
+    container_name: animal-hotel-logstash
+    depends_on:
+      - elasticsearch
+    ports:
+      - "12201:12201/udp"
+    volumes:
+      - ./logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    networks:
+      - animal-hotel-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: animal-hotel-kibana
+    depends_on:
+      - elasticsearch
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      XPACK_SECURITY_ENABLED: "false"
+    ports:
+      - "5601:5601"
+    networks:
+      - animal-hotel-network
+
+  minio:
+    image: minio/minio
+    container_name: animal-hotel-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    ports:
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - animal-hotel-network
+
 
 networks:
   animal-hotel-network:
 
 volumes:
   postgres_data:
-
+  elasticsearch_data:
+  minio_data:

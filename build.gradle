@@ -28,7 +28,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-liquibase-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-	
+	implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
